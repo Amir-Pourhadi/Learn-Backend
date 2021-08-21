@@ -2,12 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 /**
- * @route GET api/users
+ * @route POST api/users
  * @desc test Route
  * @access public
  */
 
-router.get("/", (req, res) => {
+router.post("/", (req, res) => {
+  console.log(req.body);
   res.send("Users Route");
 });
 
