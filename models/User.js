@@ -5,9 +5,9 @@ const UserSchema = new Schema({
   email: { type: String, require: true, unique: true },
   password: { type: String, require: true },
   avatar: { type: String },
-  date: { type: date, default: Date.now },
+  date: { type: Date, default: Date.now },
 });
 
-const User = model(User, UserSchema);
+const User = model("User", UserSchema);
 
 module.exports = User;
