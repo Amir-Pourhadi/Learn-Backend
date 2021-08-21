@@ -1,0 +1,22 @@
+{
+  "name": "learn-backend",
+  "version": "1.0.0",
+  "description": "Start learning backend",
+  "main": "lib/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Amir-Pourhadi/Learn-Backend.git"
+  },
+  "keywords": [
+    "backend"
+  ],
+  "author": "Amir",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Amir-Pourhadi/Learn-Backend/issues"
+  },
+  "homepage": "https://github.com/Amir-Pourhadi/Learn-Backend#readme"
+}
