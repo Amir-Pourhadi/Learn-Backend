@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../../middleware/auth");
 
 /**
  * @route GET api/auth
@@ -7,7 +8,7 @@ const router = express.Router();
  * @access public
  */
 
-router.get("/", (req, res) => {
+router.get("/", auth, async (req, res) => {
   res.send("Auth Route");
 });
 
