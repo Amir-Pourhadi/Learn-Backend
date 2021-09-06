@@ -66,38 +66,44 @@ router.post(
 
     // Build profile object
     const profileFields = {};
+
     profileFields.user = req.user.id;
     if (company) profileFields.company = company;
     if (website) profileFields.website = website;
     if (location) profileFields.location = location;
     if (bio) profileFields.bio = bio;
-    if (status) profileFields.bio = status;
-    if (githubusername) profileFields.bio = githubusername;
+    if (status) profileFields.status = status;
+    if (githubusername) profileFields.githubusername = githubusername;
     if (skills) {
       profileFields.skills = skills.split(",").map((skill) => skill.trim());
     }
+
     // Build social object
     profileFields.social = {};
-
     if (youtube) profileFields.social.youtube = youtube;
-    if (twitter) profileFields.social.twitter = youtube;
+    if (twitter) profileFields.social.twitter = twitter;
     if (facebook) profileFields.social.facebook = facebook;
     if (linkedin) profileFields.social.linkedin = linkedin;
     if (instagram) profileFields.social.instagram = instagram;
     if (github) profileFields.social.github = github;
+
     try {
       let profile = await Profile.findOne({ user: req.user.id });
 
       if (profile) {
         // UPDATE
+        // https://docs.mongodb.com/manual/reference/method/db.collection.findOneAndUpdate/
         profile = await Profile.findOneAndUpdate({ user: req.user.id }, { $set: profileFields }, { new: true });
+        return res.json(profile);
       }
+
       // CREATE
       profile = new Profile(profileFields);
       await profile.save();
       res.json(profile);
     } catch (err) {
-      console.status(500).send("Server Error");
+      console.error(err.message);
+      res.status(500).send("Server Error");
     }
   }
 );
