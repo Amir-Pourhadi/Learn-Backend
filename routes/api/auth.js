@@ -4,10 +4,12 @@ const router = Router();
 
 /**
  * @route GET api/auth
- * @description authenticate users
- * @access private
+ * @description Test route
+ * @access public
  */
 
 router.get("/", (req, res) => {
   res.send("Auth Route!");
 });
+
+module.exports = router;

@@ -4,10 +4,12 @@ const router = Router();
 
 /**
  * @route GET api/profile/me
- * @description Get current user's profile
- * @access private
+ * @description Test route
+ * @access public
  */
 
 router.get("/", (req, res) => {
   res.send("Profile Route!");
 });
+
+module.exports = router;
