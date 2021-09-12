@@ -1,10 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const ProfileSchema = new Schema({
-  user: {
-    // You will get access to this with user.idtype: Schema.Types.ObjectId,
-    ref: "user",
-  },
+  user: { type: Schema.Types.ObjectId, ref: "user" },
   company: { type: String },
   website: { type: String },
   location: { type: String },
