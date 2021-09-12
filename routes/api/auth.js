@@ -20,11 +20,14 @@ router.get("/", auth, async (req, res) => {
     const user = await User.findById(req.user.id).select("-password");
 
     res.json(user);
+
+    // Handle Errors
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
+
 /**
  * @route POST api/auth
  * @description Authentication user and get token
@@ -41,9 +44,10 @@ router.post(
     }
 
     const { email, password } = req.body;
+
     try {
       // See if user exists
-      let user = await User.findOne({ email: email });
+      let user = await User.findOne({ email });
       if (!user) {
         return res.status(400).json({ errors: [{ msg: "Invalid username or password" }] });
       }
