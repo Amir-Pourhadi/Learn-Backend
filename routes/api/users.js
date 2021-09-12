@@ -4,6 +4,7 @@ const User = require("../../models/User");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const config = require("config");
+const jwt = require("jsonwebtoken");
 
 const router = Router();
 
@@ -51,6 +52,8 @@ router.post(
         if (err) throw err;
         res.json({ token });
       });
+
+      // handle errors
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Server Error!");
