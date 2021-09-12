@@ -21,6 +21,8 @@ router.get("/me", auth, async (req, res) => {
     }
 
     res.json(profile);
+
+    // Handle errors
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -100,8 +102,9 @@ router.post(
       // CREATE
       profile = new Profile(profileFields);
       await profile.save();
-      console.log(profileFields);
       res.json(profile);
+
+      // Handle Errors
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
@@ -120,6 +123,8 @@ router.get("/", async (req, res) => {
     const profiles = await Profile.find().populate("User", ["name", "avatar"]);
 
     res.json(profiles);
+
+    // Handle errors
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -141,6 +146,8 @@ router.get("/user/:user_id", async (req, res) => {
     if (!profile) res.status(400).json({ msg: "Profile not found" });
 
     res.json(profile);
+
+    // Handle Errors
   } catch (err) {
     console.error(err.message);
     if (err.kind == "ObjectId") {
@@ -149,5 +156,70 @@ router.get("/user/:user_id", async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+/**
+ * @route DELETE api/profile/
+ * @description Delete a profile, user & Cards belong to the user
+ * @access private
+ */
+
+router.delete("/", auth, async (req, res) => {
+  try {
+    // Remove user's cards (later)
+
+    // Remove Profile
+    await Profile.findOneAndRemove({ user: req.user.id });
+
+    // Remove User
+    await User.findOneAndRemove({ _id: req.user.id });
+
+    res.json({ msg: "User Deleted!" });
+
+    // Handle Errors
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+/**
+ * @route PUT api/profile/experience
+ * @description Add profile experience
+ * @access private
+ */
+
+router.put(
+  "/experience",
+  [
+    auth,
+    [
+      check("title", "Title is required!").not().isEmpty(),
+      check("company", "Company is required!").not().isEmpty(),
+      check("From", "From is required!").not().isEmpty(),
+    ],
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { title, company, location, from, to, current, description } = req.body;
+
+    const newExp = { title, company, location, from, to, current, description };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+
+      profile.experience.unshift(newExp);
+      await profile.save();
+
+      res.json(profile);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
 
 module.exports = router;
